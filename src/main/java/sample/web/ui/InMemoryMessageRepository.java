@@ -41,7 +41,7 @@ public class InMemoryMessageRepository implements MessageRepository {
 	@Async
   public void refreshData() {
 	  
-	// Create a connection to your Firebase database
+	/*// Create a connection to your Firebase database
     Firebase ref = new Firebase(BASE_REPO_URL);
 
     // Listen for realtime changes
@@ -53,7 +53,7 @@ public class InMemoryMessageRepository implements MessageRepository {
             save(newMsg);
         }
         @Override public void onCancelled(FirebaseError error) { }
-    });
+    });*/
 	}
 
 	@Override
