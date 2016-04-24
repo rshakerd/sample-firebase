@@ -1,63 +1,43 @@
 package sample.web.ui;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicLong;
-
-import org.springframework.scheduling.annotation.Async;
-
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 public class InMemoryMessageRepository implements MessageRepository {
 
-	private static AtomicLong counter = new AtomicLong();
-	
-	private static String BASE_REPO_URL = "https://brilliant-fire-2824.firebaseio.com/";
-
-	private final ConcurrentMap<Long, Message> messages = new ConcurrentHashMap<Long, Message>();
+	private final ConcurrentMap<String, Set<Message>> messages = 
+	    new ConcurrentHashMap<String, Set<Message>>();
 
 	@Override
 	public Iterable<Message> findAll() {
 	
-	  refreshData();
-		return this.messages.values();
+	  List<Message> allMsgs = new ArrayList<Message>();
+	  this.messages.values().forEach(entry -> {
+	    allMsgs.addAll(entry);
+	  });
+		return allMsgs;
 	}
 
 	
 	@Override
   public Message save(Message message) {
-	  Long id = message.getId();
-    if (id == null) {
-      id = counter.incrementAndGet();
-      message.setId(id);
-    }
-    this.messages.put(id, message);
+	  String id = message.getId();
+	  if(this.messages.containsKey(id))
+	    this.messages.get(id).add(message);
+	  else {
+	    Set<Message> initMsgList = new HashSet<Message>();
+	    initMsgList.add(message);
+	    this.messages.put(id,initMsgList);
+	  }
     return message;
   }
 
-	@Async
-  public void refreshData() {
-	  
-	/*// Create a connection to your Firebase database
-    Firebase ref = new Firebase(BASE_REPO_URL);
-
-    // Listen for realtime changes
-    ref.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot snap) {
-            Message newMsg = new Message();
-            newMsg.setText((String)snap.getValue());
-            save(newMsg);
-        }
-        @Override public void onCancelled(FirebaseError error) { }
-    });*/
-	}
-
 	@Override
-	public Message findMessage(Long id) {
+	public Iterable<Message> findMessages(String id) {
 		return this.messages.get(id);
 	}
 

@@ -1,26 +1,32 @@
 package sample.web.ui;
 
 import java.util.Calendar;
+import java.util.Map;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.firebase.client.DataSnapshot;
+
 public class Message {
 
-	private Long id;
+	private String id;
 
-	@NotEmpty(message = "Message is required.")
 	private String text;
 
-	@NotEmpty(message = "Summary is required.")
-	private String summary;
-
 	private Calendar created = Calendar.getInstance();
+	
+	Message (DataSnapshot snapshot ){
+	  this.key = snapshot.getKey();
+	  this.id = (String) ((Map)snapshot.getValue()).get("name");
+    this.text = (String) ((Map)snapshot.getValue()).get("text");
+	}
+	private String key;
 
-	public Long getId() {
+	public String getId() {
 		return this.id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -40,11 +46,16 @@ public class Message {
 		this.text = text;
 	}
 
-	public String getSummary() {
-		return this.summary;
-	}
+  @Override
+  public int hashCode() {
+    return key.hashCode();
+  }
 
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    
+    Message compareWith = (Message) obj;
+    return this.key.equals(compareWith.key);
+  }
+
 }

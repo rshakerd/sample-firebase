@@ -14,15 +14,16 @@ public class BaseWebApplication {
 	}
 
 	@Bean
-	public Converter<String, Message> messageConverter() {
-		return new Converter<String, Message>() {
-			@Override
-			public Message convert(String id) {
-				return messageRepository().findMessage(Long.valueOf(id));
-			}
+	public Converter<String, Iterable<Message>> messageConverter() {
+		return new Converter<String, Iterable<Message>>() {
+
+        @Override
+        public Iterable<Message> convert(String id) {
+          return messageRepository().findMessages(id);
+        }
 		};
 	}
-
+	
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(BaseWebApplication.class, args);
 	}

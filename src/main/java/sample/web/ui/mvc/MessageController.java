@@ -33,8 +33,8 @@ public class MessageController {
 	}
 
 	@RequestMapping("{id}")
-	public ModelAndView view(@PathVariable("id") Message message) {
-		return new ModelAndView("messages/view", "message", message);
+	public ModelAndView view(@PathVariable("id") String id) {
+		return new ModelAndView("messages/view", "messages", this.messageRepository.findMessages(id));
 	}
 
 	@RequestMapping(params = "form", method = RequestMethod.GET)

@@ -15,17 +15,21 @@
 				<a class="brand"
 					href="https://github.com/ultraq/thymeleaf-layout-dialect">
 					Firebase - Sample chat app</a>
-				<ul class="nav">
-					<li><a th:href="@{/}" href="messages.html"> Messages </a></li>
-				</ul>
 			</div>
 		</div>
 		<h1 layout:fragment="header">Layout</h1>
+		<div class="nav">
+					<input type="button" value="Refresh Messages" onclick="reloadPage()"/>
+		</div>
 		<div layout:fragment="content">Fake content</div>
+		<div id='messagesDiv' style="position: absolute;bottom: 0 ;padding: 15px;
+    background-color: aliceblue;">
+    		<h3>Chat (hit enter to finish message)</h3>
+			<input type='text' id='nameInput' placeholder='Name' />
+			<br/>
+			<input type='text' id='messageInput' placeholder='Message' />
+		</div>
 	</div>
-	<div id='messagesDiv'></div>
-    <input type='text' id='nameInput' placeholder='Name'/>
-    <input type='text' id='messageInput' placeholder='Message'/>
     <script>
       var myDataRef = new Firebase('https://brilliant-fire-2824.firebaseio.com/');
       $('#messageInput').keypress(function (e) {
@@ -36,14 +40,17 @@
           $('#messageInput').val('');
         }
       });
-      myDataRef.on('child_added', function(snapshot) {
+      /* myDataRef.on('child_added', function(snapshot) {
         var message = snapshot.val();
         displayChatMessage(message.name, message.text);
-      });
+      }); */
       function displayChatMessage(name, text) {
         $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
         $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
       };
+      function reloadPage(){
+    	location.reload();
+      }
     </script>
 </body>
 </html>
