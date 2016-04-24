@@ -5,5 +5,5 @@
 
 ### running instructions
 - install Java 1.8+ versions
-- run the app java -jar bin/sample-firebase-app-1.0.RELEASE.jar
+- run the app <b><i>java -jar bin/sample-firebase-app-1.0.RELEASE.jar<i><b>
 - open the application at http://localhost:8080/
