@@ -11,6 +11,8 @@
 	<groupId>com.sample</groupId>
 	<artifactId>sample-firebase-app</artifactId>
 	<name>Sample Firebase App</name>
+	<version>1.0.RELEASE</version>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
